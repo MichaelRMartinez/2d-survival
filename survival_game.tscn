@@ -1,17 +1,18 @@
 [gd_scene load_steps=5 format=3 uid="uid://b8abc8styjmuq"]
 
+[ext_resource type="Script" path="res://survival_game.gd" id="1_ebg5e"]
 [ext_resource type="PackedScene" uid="uid://dccsdc7o18tfw" path="res://player.tscn" id="1_rmjks"]
 [ext_resource type="PackedScene" uid="uid://d23ytdegrgmks" path="res://pine_tree.tscn" id="2_voeem"]
-[ext_resource type="PackedScene" uid="uid://chxvlx6qu4f5n" path="res://mob.tscn" id="3_bq8ro"]
 
-[sub_resource type="Curve2D" id="Curve2D_gwjvv"]
+[sub_resource type="Curve2D" id="Curve2D_geaey"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -149, -254, 0, 0, 0, 0, 780, -269, 0, 0, 0, 0, 2166, -273, 0, 0, 0, 0, 2166, 1275, 0, 0, 0, 0, -194, 1287, 0, 0, 0, 0, -149, -254)
+"points": PackedVector2Array(0, 0, 0, 0, -149, -147, 0, 0, 0, 0, 2058, -161, 0, 0, 0, 0, 2086, 1214, 0, 0, 0, 0, -169, 1216, 0, 0, 0, 0, -160, -150, 0, 0, 0, 0, -153, -146)
 }
 point_count = 6
 
 [node name="Game" type="Node2D"]
 y_sort_enabled = true
+script = ExtResource("1_ebg5e")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = -1
@@ -24,6 +25,15 @@ offset_bottom = 1115.0
 
 [node name="Player" parent="." instance=ExtResource("1_rmjks")]
 position = Vector2(945, 556)
+
+[node name="Path2D" type="Path2D" parent="Player"]
+position = Vector2(-945, -556)
+curve = SubResource("Curve2D_geaey")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Player/Path2D"]
+unique_name_in_owner = true
+position = Vector2(-149, -147)
+rotation = -0.00634337
 
 [node name="PineTree" parent="." instance=ExtResource("2_voeem")]
 position = Vector2(326, 230)
@@ -40,8 +50,8 @@ position = Vector2(1373, 334)
 [node name="PineTree5" parent="." instance=ExtResource("2_voeem")]
 position = Vector2(1662, 737)
 
-[node name="Mob" parent="." instance=ExtResource("3_bq8ro")]
-position = Vector2(660, 310)
+[node name="Timer" type="Timer" parent="."]
+wait_time = 1.2
+autostart = true
 
-[node name="Path2D" type="Path2D" parent="."]
-curve = SubResource("Curve2D_gwjvv")
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
